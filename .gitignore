@@ -1,0 +1,30 @@
+# Frontend
+node_modules/
+dist/
+build/
+.env
+.env.local
+
+# Backend (.NET)
+bin/
+obj/
+appsettings.Development.json
+
+# Logs
+*.log
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Secrets
+*.secret
+.env
+
+# Keep example env files
+!.env.example
+!**/.env.example
