@@ -14,7 +14,7 @@ public class ProviderResolver
     public INewsProvider GetProvider(string providerType)
     {
         var provider = _providers.FirstOrDefault(candidate =>
-            string.Equals(ResolveTypeKey(candidate), providerType, StringComparison.OrdinalIgnoreCase));
+            string.Equals(candidate.ProviderType, providerType, StringComparison.OrdinalIgnoreCase));
 
         if (provider is null)
         {
@@ -22,17 +22,5 @@ public class ProviderResolver
         }
 
         return provider;
-    }
-
-    private static string ResolveTypeKey(INewsProvider provider)
-    {
-        var typeName = provider.GetType().Name;
-
-        if (typeName.EndsWith("Provider", StringComparison.Ordinal))
-        {
-            typeName = typeName[..^"Provider".Length];
-        }
-
-        return typeName.ToLowerInvariant();
     }
 }
