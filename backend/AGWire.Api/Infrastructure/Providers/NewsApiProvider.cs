@@ -7,7 +7,9 @@ public class NewsApiProvider : INewsProvider
 {
     public string ProviderType => "newsapi";
 
-    public Task<IReadOnlyList<Article>> GetTopHeadlinesAsync(CancellationToken cancellationToken = default)
+    public Task<IReadOnlyList<Article>> GetTopHeadlinesAsync(
+        string? category = null,
+        CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
