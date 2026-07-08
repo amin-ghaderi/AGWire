@@ -6,5 +6,5 @@ public class NewsApiResponse
 
     public int TotalResults { get; set; }
 
-    public List<NewsApiArticle>? Articles { get; set; }
+    public List<NewsApiArticle> Articles { get; set; } = [];
 }
