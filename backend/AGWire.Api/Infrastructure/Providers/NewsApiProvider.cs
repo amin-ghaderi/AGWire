@@ -36,10 +36,13 @@ public class NewsApiProvider : INewsProvider
 
     public string ProviderType => "newsapi";
 
-    public Task<IReadOnlyList<Article>> GetTopHeadlinesAsync(
+    public async Task<IReadOnlyList<Article>> GetTopHeadlinesAsync(
         string? category = null,
         CancellationToken cancellationToken = default)
     {
+        var requestUrl = BuildTopHeadlinesUrl(category);
+        using var response = await _httpClient.GetAsync(requestUrl, cancellationToken);
+        response.EnsureSuccessStatusCode();
         throw new NotImplementedException();
     }
 
