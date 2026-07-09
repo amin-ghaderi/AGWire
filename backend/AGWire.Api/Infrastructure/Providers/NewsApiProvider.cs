@@ -8,8 +8,8 @@ namespace AGWire.Api.Infrastructure.Providers;
 public class NewsApiProvider : INewsProvider
 {
     private readonly HttpClient _httpClient;
-    private readonly string? _apiKey;
-    private readonly string? _baseUrl;
+    private readonly string _apiKey;
+    private readonly string _baseUrl;
 
     public NewsApiProvider(HttpClient httpClient, IConfiguration configuration)
     {
@@ -77,7 +77,7 @@ public class NewsApiProvider : INewsProvider
 
     private string BuildUrl(string endpoint, IEnumerable<KeyValuePair<string, string?>> queryParameters)
     {
-        var normalizedBaseUrl = _baseUrl!.EndsWith('/') ? _baseUrl : $"{_baseUrl}/";
+        var normalizedBaseUrl = _baseUrl.EndsWith('/') ? _baseUrl : $"{_baseUrl}/";
         var requestPath = $"{normalizedBaseUrl}{endpoint.TrimStart('/')}";
 
         var query = queryParameters
