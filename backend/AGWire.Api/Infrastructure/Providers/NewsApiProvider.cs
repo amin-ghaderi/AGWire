@@ -19,6 +19,8 @@ public class NewsApiProvider : INewsProvider
         ArgumentNullException.ThrowIfNull(configuration);
 
         _httpClient = httpClient;
+        _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("AGWire/1.0");
+        _httpClient.DefaultRequestHeaders.Accept.ParseAdd("application/json");
 
         var apiKey = configuration["NewsApi:ApiKey"];
         if (string.IsNullOrEmpty(apiKey))
