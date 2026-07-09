@@ -44,7 +44,12 @@ public class NewsApiProvider : INewsProvider
     {
         var requestUrl = BuildTopHeadlinesUrl(category);
         using var response = await _httpClient.GetAsync(requestUrl, cancellationToken);
-        response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+        {
+            var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+            throw new InvalidOperationException(
+                $"NewsAPI request failed.\nStatus: {(int)response.StatusCode} {response.StatusCode}\nBody:\n{responseBody}");
+        }
 
         var newsApiResponse = await response.Content.ReadFromJsonAsync<NewsApiResponse>(cancellationToken);
         if (newsApiResponse is null)
@@ -59,7 +64,12 @@ public class NewsApiProvider : INewsProvider
     {
         var requestUrl = BuildSearchUrl(query);
         using var response = await _httpClient.GetAsync(requestUrl, cancellationToken);
-        response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+        {
+            var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+            throw new InvalidOperationException(
+                $"NewsAPI request failed.\nStatus: {(int)response.StatusCode} {response.StatusCode}\nBody:\n{responseBody}");
+        }
 
         var newsApiResponse = await response.Content.ReadFromJsonAsync<NewsApiResponse>(cancellationToken);
         if (newsApiResponse is null)
