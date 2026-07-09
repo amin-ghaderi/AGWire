@@ -1,7 +1,9 @@
 using AGWire.Api.Domain.Entities;
 using AGWire.Api.Domain.Interfaces;
+using AGWire.Api.Infrastructure.Providers.NewsApi.Models;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
+using System.Net.Http.Json;
 
 namespace AGWire.Api.Infrastructure.Providers;
 
@@ -43,6 +45,13 @@ public class NewsApiProvider : INewsProvider
         var requestUrl = BuildTopHeadlinesUrl(category);
         using var response = await _httpClient.GetAsync(requestUrl, cancellationToken);
         response.EnsureSuccessStatusCode();
+
+        var newsApiResponse = await response.Content.ReadFromJsonAsync<NewsApiResponse>(cancellationToken);
+        if (newsApiResponse is null)
+        {
+            throw new InvalidOperationException("Failed to deserialize NewsAPI top-headlines response.");
+        }
+
         throw new NotImplementedException();
     }
 
