@@ -52,12 +52,41 @@ public class NewsApiProvider : INewsProvider
             throw new InvalidOperationException("Failed to deserialize NewsAPI top-headlines response.");
         }
 
-        throw new NotImplementedException();
+        return MapArticles(newsApiResponse.Articles, category);
     }
 
-    public Task<IReadOnlyList<Article>> SearchAsync(string query, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<Article>> SearchAsync(string query, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var requestUrl = BuildSearchUrl(query);
+        using var response = await _httpClient.GetAsync(requestUrl, cancellationToken);
+        response.EnsureSuccessStatusCode();
+
+        var newsApiResponse = await response.Content.ReadFromJsonAsync<NewsApiResponse>(cancellationToken);
+        if (newsApiResponse is null)
+        {
+            throw new InvalidOperationException("Failed to deserialize NewsAPI search response.");
+        }
+
+        return MapArticles(newsApiResponse.Articles, category: null);
+    }
+
+    private static IReadOnlyList<Article> MapArticles(IEnumerable<NewsApiArticle> articles, string? category)
+    {
+        return articles
+            .Where(article => !string.IsNullOrWhiteSpace(article.Url) && !string.IsNullOrWhiteSpace(article.Title))
+            .Select(article => new Article
+            {
+                Id = article.Url!,
+                Title = article.Title!,
+                Description = article.Description,
+                Content = article.Content,
+                ImageUrl = article.UrlToImage,
+                PublishedAt = article.PublishedAt ?? DateTime.UtcNow,
+                SourceName = article.Source?.Name ?? string.Empty,
+                Url = article.Url!,
+                Category = category
+            })
+            .ToList();
     }
 
     private string BuildTopHeadlinesUrl(string? category)
