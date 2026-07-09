@@ -16,8 +16,21 @@ public class NewsApiProvider : INewsProvider
         ArgumentNullException.ThrowIfNull(configuration);
 
         _httpClient = httpClient;
-        _apiKey = configuration["NewsApi:ApiKey"];
-        _baseUrl = configuration["NewsApi:BaseUrl"];
+
+        var apiKey = configuration["NewsApi:ApiKey"];
+        if (string.IsNullOrEmpty(apiKey))
+        {
+            throw new InvalidOperationException("NewsApi:ApiKey is not configured.");
+        }
+
+        var baseUrl = configuration["NewsApi:BaseUrl"];
+        if (string.IsNullOrEmpty(baseUrl))
+        {
+            throw new InvalidOperationException("NewsApi:BaseUrl is not configured.");
+        }
+
+        _apiKey = apiKey;
+        _baseUrl = baseUrl;
     }
 
     public string ProviderType => "newsapi";
