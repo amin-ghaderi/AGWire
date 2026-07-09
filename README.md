@@ -1,43 +1,38 @@
 # AGWire
 
-AGWire is a modern full-stack news aggregation platform built with React and ASP.NET Core Minimal API.
+A modern news web application built with React, ASP.NET Core Minimal API, and NewsAPI.
 
-## Stack
+## Tech Stack
 
-### Frontend
 - React
-- Vite
 - TypeScript
+- Vite
 - Tailwind CSS
 - shadcn/ui
 - TanStack Query
-
-### Backend
-- C#
 - ASP.NET Core Minimal API
-- JSON persistence
+- NewsAPI
 
 ## Features
 
-- Browse top headlines
-- Search news
-- Filter by category
-- Read article details
-- Manage news providers via admin panel
+- Top headlines
+- News search
+- Article details
+- Responsive layout
 
-## Architecture
+## Run
 
-AGWire follows a lightweight Clean Architecture with a provider-based design.
+Backend
 
-Main layers:
+```bash
+cd backend/AGWire.Api
+dotnet run
+```
 
-- Presentation
-- Application
-- Domain
-- Infrastructure
+Frontend
 
-## Future Plans
-
-- Add more news providers
-- Improve admin capabilities
-- Expand platform features
+```bash
+cd frontend
+npm install
+npm run dev
+```
