@@ -1,5 +1,7 @@
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { Link, useLocation } from "react-router";
+import { ArticleImage } from "@/components/common/ArticleImage";
+import { PageEmpty } from "@/components/common/PageStatus";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
@@ -14,40 +16,28 @@ export function ArticlePage() {
   const article = state?.article;
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    <div className="flex min-h-screen flex-col overflow-x-hidden bg-background">
       <Header />
 
-      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 md:px-6 md:py-10">
-        <Button asChild variant="ghost" className="mb-6 -ml-2">
+      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 md:px-6 md:py-10">
+        <Button asChild variant="ghost" className="mb-8 -ml-2 h-10 px-3">
           <Link to="/">
-            <ArrowLeft />
+            <ArrowLeft aria-hidden="true" />
             Back to home
           </Link>
         </Button>
 
         {!article ? (
-          <p className="py-20 text-center text-muted-foreground">Article not available.</p>
+          <PageEmpty message="Article not available." />
         ) : (
           <article>
-            <Card className="overflow-hidden rounded-xl border shadow-md">
+            <Card className="overflow-hidden rounded-xl border shadow-sm">
               <div className="aspect-[16/9] overflow-hidden bg-muted md:aspect-[21/9]">
-                {article.imageUrl ? (
-                  <img
-                    src={article.imageUrl}
-                    alt={article.title}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-muted">
-                    <span className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
-                      No image
-                    </span>
-                  </div>
-                )}
+                <ArticleImage src={article.imageUrl} alt={article.title} />
               </div>
 
               <CardContent className="space-y-6 p-6 md:p-8">
-                <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
                   <span className="font-semibold text-foreground">{article.sourceName}</span>
                   <span aria-hidden="true">·</span>
                   <time dateTime={article.publishedAt}>
@@ -71,10 +61,10 @@ export function ArticlePage() {
                   <p className="text-sm leading-relaxed text-muted-foreground">{article.content}</p>
                 )}
 
-                <Button asChild size="lg">
+                <Button asChild size="lg" className="mt-2">
                   <a href={article.url} target="_blank" rel="noopener noreferrer">
                     Read Original Article
-                    <ExternalLink />
+                    <ExternalLink aria-hidden="true" />
                   </a>
                 </Button>
               </CardContent>
