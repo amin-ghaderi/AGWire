@@ -1,4 +1,3 @@
-import { TrendingUp } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import type { Article } from "@/shared/types";
@@ -15,35 +14,27 @@ export function TrendingSidebar({ articles }: TrendingSidebarProps) {
   }
 
   return (
-    <aside className="lg:sticky lg:top-8">
-      <Card className="border shadow-sm">
-        <CardHeader className="pb-4">
-          <CardTitle className="flex items-center gap-2 text-base font-bold uppercase tracking-wide">
-            <TrendingUp className="size-4" />
+    <aside aria-label="Trending headlines" className="lg:sticky lg:top-24">
+      <Card className="rounded-xl border shadow-sm">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground">
             Trending
           </CardTitle>
         </CardHeader>
 
-        <CardContent className="space-y-0 pb-6 pt-0">
+        <CardContent className="pb-6 pt-0">
           <ol className="space-y-0">
             {trendingArticles.map((article, index) => (
               <li key={article.id}>
-                <a
-                  href={article.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex gap-4 rounded-lg px-2 py-3 transition-colors hover:bg-muted/50"
-                >
-                  <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
+                <div className="flex gap-4 py-3">
+                  <span className="w-6 shrink-0 text-lg font-bold tabular-nums text-muted-foreground">
                     {index + 1}
                   </span>
                   <div className="min-w-0 space-y-1">
-                    <p className="line-clamp-2 text-sm font-medium leading-snug group-hover:text-primary">
-                      {article.title}
-                    </p>
+                    <p className="line-clamp-2 text-sm font-medium leading-snug">{article.title}</p>
                     <p className="text-xs text-muted-foreground">{article.sourceName}</p>
                   </div>
-                </a>
+                </div>
                 {index < trendingArticles.length - 1 && <Separator />}
               </li>
             ))}
