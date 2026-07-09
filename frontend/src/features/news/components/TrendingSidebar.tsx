@@ -1,5 +1,7 @@
+import { Link } from "react-router";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { getArticlePath } from "@/shared/lib/routes";
 import type { Article } from "@/shared/types";
 
 type TrendingSidebarProps = {
@@ -26,7 +28,11 @@ export function TrendingSidebar({ articles }: TrendingSidebarProps) {
           <ol className="space-y-0">
             {trendingArticles.map((article, index) => (
               <li key={article.id}>
-                <div className="flex gap-4 py-3">
+                <Link
+                  to={getArticlePath(article.id)}
+                  state={{ article }}
+                  className="flex gap-4 rounded-lg py-3 transition-colors hover:bg-muted/50"
+                >
                   <span className="w-6 shrink-0 text-lg font-bold tabular-nums text-muted-foreground">
                     {index + 1}
                   </span>
@@ -34,7 +40,7 @@ export function TrendingSidebar({ articles }: TrendingSidebarProps) {
                     <p className="line-clamp-2 text-sm font-medium leading-snug">{article.title}</p>
                     <p className="text-xs text-muted-foreground">{article.sourceName}</p>
                   </div>
-                </div>
+                </Link>
                 {index < trendingArticles.length - 1 && <Separator />}
               </li>
             ))}
