@@ -82,7 +82,7 @@ public class NewsApiProvider : INewsProvider
                 Content = article.Content,
                 ImageUrl = article.UrlToImage,
                 PublishedAt = article.PublishedAt ?? DateTime.UtcNow,
-                SourceName = article.Source?.Name ?? string.Empty,
+                SourceName = article.Source?.Name ?? "Unknown",
                 Url = article.Url!,
                 Category = category
             })
