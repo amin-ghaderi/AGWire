@@ -1,31 +1,54 @@
 using AGWire.Api.Domain.Entities;
+using AGWire.Api.Domain.Interfaces;
+using AGWire.Api.Infrastructure.Providers;
 
 namespace AGWire.Api.Application.Services;
 
 public class NewsService
 {
-    public Task<IReadOnlyList<Article>> GetTopHeadlinesAsync(
+    private readonly IProviderRepository _providerRepository;
+    private readonly ProviderResolver _providerResolver;
+
+    public NewsService(IProviderRepository providerRepository, ProviderResolver providerResolver)
+    {
+        _providerRepository = providerRepository;
+        _providerResolver = providerResolver;
+    }
+
+    public async Task<IReadOnlyList<Article>> GetTopHeadlinesAsync(
         string? category = null,
         CancellationToken cancellationToken = default)
     {
-        // Future: resolve enabled providers via ProviderResolver
-        // Future: fetch headlines from each provider in parallel
-        // Future: aggregate results across providers
-        // Future: deduplicate articles by Url
-        // Future: apply category filtering when category is provided
-        // Future: sort by PublishedAt descending
-        throw new NotImplementedException();
+        var provider = await GetHighestPriorityEnabledProviderAsync(cancellationToken);
+        if (provider is null)
+        {
+            return [];
+        }
+
+        var newsProvider = _providerResolver.GetProvider(provider.Type);
+        return await newsProvider.GetTopHeadlinesAsync(category, cancellationToken);
     }
 
-    public Task<IReadOnlyList<Article>> SearchAsync(
+    public async Task<IReadOnlyList<Article>> SearchAsync(
         string query,
         CancellationToken cancellationToken = default)
     {
-        // Future: resolve enabled providers via ProviderResolver
-        // Future: search each provider in parallel
-        // Future: aggregate results across providers
-        // Future: deduplicate articles by Url
-        // Future: sort by relevance or PublishedAt
-        throw new NotImplementedException();
+        var provider = await GetHighestPriorityEnabledProviderAsync(cancellationToken);
+        if (provider is null)
+        {
+            return [];
+        }
+
+        var newsProvider = _providerResolver.GetProvider(provider.Type);
+        return await newsProvider.SearchAsync(query, cancellationToken);
+    }
+
+    private async Task<Provider?> GetHighestPriorityEnabledProviderAsync(CancellationToken cancellationToken)
+    {
+        var providers = await _providerRepository.GetAllAsync(cancellationToken);
+        return providers
+            .Where(provider => provider.Enabled)
+            .OrderBy(provider => provider.Priority)
+            .FirstOrDefault();
     }
 }
